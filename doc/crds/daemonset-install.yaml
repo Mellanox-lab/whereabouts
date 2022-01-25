@@ -89,7 +89,8 @@ spec:
       hostNetwork: true      
       serviceAccountName: whereabouts
       nodeSelector:
-        beta.kubernetes.io/arch: amd64
+          #beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/os: linux
       tolerations:
       - operator: Exists
         effect: NoSchedule
@@ -101,7 +102,7 @@ spec:
           - >
             SLEEP=false /install-cni.sh &&
             /ip-control-loop -log-level debug
-        image: ghcr.io/k8snetworkplumbingwg/whereabouts:latest-amd64
+        image: harbor.mellanox.com/swx-infra/whereabouts:v0.5.3
         env:
         - name: WHEREABOUTS_NAMESPACE
           valueFrom:

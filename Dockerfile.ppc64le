@@ -1,0 +1,18 @@
+FROM ppc64le/golang:alpine as builder
+ADD . /usr/src/whereabouts
+
+ENV GOARCH "ppc64le"
+ENV GOOS "linux"
+
+RUN apk del bash ; apk add --update bash git && apk info -L bash
+
+RUN mkdir -p $GOPATH/src/github.com/k8snetworkplumbingwg/whereabouts
+WORKDIR $GOPATH/src/github.com/k8snetworkplumbingwg/whereabouts
+COPY . .
+RUN ./hack/build-go.sh
+
+FROM ppc64le/alpine:latest
+LABEL org.opencontainers.image.source https://github.com/k8snetworkplumbingwg/whereabouts
+COPY --from=0 /go/src/github.com/k8snetworkplumbingwg/whereabouts/bin/whereabouts .
+COPY script/install-cni.sh .
+CMD ["/install-cni.sh"]
