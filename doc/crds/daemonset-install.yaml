@@ -72,13 +72,14 @@ spec:
       hostNetwork: true      
       serviceAccountName: whereabouts
       nodeSelector:
-        beta.kubernetes.io/arch: amd64
+          #beta.kubernetes.io/arch: amd64
+        beta.kubernetes.io/os: linux
       tolerations:
       - operator: Exists
         effect: NoSchedule
       containers:
       - name: whereabouts
-        image: ghcr.io/k8snetworkplumbingwg/whereabouts:latest-amd64
+        image: harbor.mellanox.com/swx-infra/whereabouts:v0.5.1
         env:
         - name: WHEREABOUTS_NAMESPACE
           valueFrom:
